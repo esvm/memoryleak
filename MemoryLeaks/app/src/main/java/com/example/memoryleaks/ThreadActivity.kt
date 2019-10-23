@@ -7,7 +7,15 @@ import android.os.Bundle
 import android.os.SystemClock
 
 class ThreadActivity : AppCompatActivity() {
+    /**
+     * Para remover o memory leak deste arquivo, 
+     * remova os comentários deste arquivo e comente a linha 20 que contém:
+     *     ExampleTask().start()
+     * 
+     */
+
 //    private val thread = ExampleTask()
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

@@ -1,0 +1,17 @@
+# Aplicação com memory leaks para a disciplina IF710 do CIn UFPE
+
+- Edjan Michiles (esvm)
+- Wilquer Lima (wtl)
+
+## MainActivity
+  É a activity principal da aplicação, nela é inicializado um singleton com a referência para a activity. 
+  Este é o primeiro memory leak da aplicação porque o Singleton mantém uma referência para a activity, então se por algum motivo a activity for encerrada, ela não vai liberar toda a sua memória alocada de fato porque ainda existe uma referência para ela neste singleton (uma referência inútil, porque se tentarmos utilizar vamos obter erro dado que a activity foi "encerrada"). Por conta dessa referência, o Garbage Collector não consegue remover a activity da heap.
+
+  Para resolver isso, basta no arquivo `Singleton.kt` modificar o método `getInstance` para utilizar `context.applicationContext` e aí não vamos manter referência à activity, mas sim à aplicação como um todo.
+
+  Nesta activity temos um botão que inicia uma outra activity com mais um memory leak.
+
+## ThreadActivity
+  Aqui temos o segundo leak. Esta classe inicia uma thread que faz uma determinada ação. O problema é que quando a activity é finalizada e a thread ainda não encerrou, uma referência para a activity vai ser mantida por conta desta thread, e aí o Garbage Collector não vai conseguir remover toda a memória alocada para essa activity, gerando um memory leak. 
+
+  Para resolver isso basta dar override no método `onDestroy` da activity para encerrar os trabalhos da thread também. As instruções completas estão no arquivo `ThreadActivity.kt`
